@@ -1,22 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bouncer : MonoBehaviour
 {
-    public float explosionForce = 500f;
-    public float explosionRadius = 5f;
-    public ForceMode forceMode = ForceMode.Impulse;  
+    [SerializeField] float explosionForce = 50f;
+    [SerializeField] float explosionRadius = 5f;
+    [SerializeField] int pointsPerHit = 100;
 
-    private void OnTriggerEnter(Collider other)
+    private ForceMode forceMode = ForceMode.Impulse;
+    private GameManager gm;
+    private float explosionForceFactor = 10f;
+    void Start()
     {
-        Rigidbody objectRigidbody = other.attachedRigidbody;  
+        gm = FindObjectOfType<GameManager>();
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        gm.AddPoints(pointsPerHit);
+
+        Rigidbody objectRigidbody = other.attachedRigidbody;
+        ExplosionHandle(objectRigidbody);
+    }
+    private void ExplosionHandle(Rigidbody objectRigidbody)
+    {
+        
 
         if (objectRigidbody != null)
         {
             Vector3 explosionPosition = transform.position;
 
-            objectRigidbody.AddExplosionForce(explosionForce, explosionPosition, explosionRadius, 0f, forceMode);
+            objectRigidbody.AddExplosionForce(explosionForce * explosionForceFactor, explosionPosition, explosionRadius, 0f, forceMode);
+
         }
+
     }
 }

@@ -1,60 +1,90 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FlipperControll : MonoBehaviour
 {
-    public float resetPosition = 0f;
-    public float pressedPosition = 45f;
-    public float hitStrength = 10000f;
-    public float flipperDamper = 150f;
-    public bool right = true;
+    [SerializeField] float resetPosition = 0f;
+    [SerializeField] float pressedPosition = 45f;
+    [SerializeField, Range(0, 10)] float hitStrength = 10f;
+    [SerializeField] float flipperDamper = 150f;
+    [SerializeField] float minMaxRange = 10f;
 
-    private HingeJoint joint;
+    [SerializeField] HingeJoint rightFlipperJoint;
+    [SerializeField] HingeJoint leftFlipperJoint;
+
+    private float hitStrengthFactor = 1000f;
 
     private void Start()
     {
-        joint = GetComponent<HingeJoint>();
-        joint.useSpring = true;
+        if (rightFlipperJoint != null)
+        {
+            rightFlipperJoint.useSpring = true;
+            JointLimits rightLimits = rightFlipperJoint.limits;
+            rightLimits.min = resetPosition - minMaxRange;
+            rightLimits.max = pressedPosition + minMaxRange;
+            rightFlipperJoint.limits = rightLimits;
+        }
 
-        JointLimits limits = joint.limits;
-        limits.min = resetPosition - 10; 
-        limits.max = pressedPosition + 10; 
-        joint.limits = limits;
+        if (leftFlipperJoint != null)
+        {
+            leftFlipperJoint.useSpring = true;
+            JointLimits leftLimits = leftFlipperJoint.limits;
+            leftLimits.min = resetPosition - minMaxRange;
+            leftLimits.max = -pressedPosition + minMaxRange;
+            leftFlipperJoint.limits = leftLimits;
+        }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        JointSpring spring = new JointSpring
-        {
-            spring = hitStrength,
-            damper = flipperDamper
-        };
+        ControlRightFlipper();
+        ControlLeftFlipper();
+    }
 
-        if (right)
+    private void ControlRightFlipper()
+    {
+        if (rightFlipperJoint != null)
         {
-            if (Input.GetMouseButton(1))  
+            JointSpring rightSpring = new JointSpring
             {
-                spring.targetPosition = pressedPosition;
+                spring = hitStrength * hitStrengthFactor,
+                damper = flipperDamper
+            };
+
+            if (Input.GetMouseButton(1))
+            {
+                rightSpring.targetPosition = pressedPosition;
             }
             else
             {
-                spring.targetPosition = resetPosition;
+                rightSpring.targetPosition = resetPosition;
             }
+
+            rightFlipperJoint.spring = rightSpring;
+            rightFlipperJoint.useLimits = true;
         }
-        else 
+    }
+
+    private void ControlLeftFlipper()
+    {
+        if (leftFlipperJoint != null)
         {
-            if (Input.GetMouseButton(0))  
+            JointSpring leftSpring = new JointSpring
             {
-                spring.targetPosition = pressedPosition;
+                spring = hitStrength * hitStrengthFactor,
+                damper = flipperDamper
+            };
+
+            if (Input.GetMouseButton(0))
+            {
+                leftSpring.targetPosition = -pressedPosition;
             }
             else
             {
-                spring.targetPosition = resetPosition;
+                leftSpring.targetPosition = resetPosition;
             }
-        }
 
-        joint.spring = spring;
-        joint.useLimits = true;
+            leftFlipperJoint.spring = leftSpring;
+            leftFlipperJoint.useLimits = true;
+        }
     }
 }

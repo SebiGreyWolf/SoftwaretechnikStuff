@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7925210969775498098}
   - component: {fileID: 5909029643982894919}
+  - component: {fileID: 7368956833292600649}
   m_Layer: 0
   m_Name: Point
   m_TagString: Points
@@ -56,6 +57,21 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7368956833292600649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6094833507810712483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2d8fea002027ee478153cb66a983e5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionForce: 7
+  explosionForceFactor: 10
+  explosionRadius: 5
 --- !u!1 &7899477737806503699
 GameObject:
   m_ObjectHideFlags: 0

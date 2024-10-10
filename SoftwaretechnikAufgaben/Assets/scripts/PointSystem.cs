@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class PointSystem : MonoBehaviour
 {
-    public int score = 0;              
-    public TextMeshProUGUI scoreText;              
-    public int pointsPerHit = 100;      
+    [SerializeField] int score = 0;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] int pointsPerHit = 100;      
     void Start()
     {
         UpdateScoreUI();

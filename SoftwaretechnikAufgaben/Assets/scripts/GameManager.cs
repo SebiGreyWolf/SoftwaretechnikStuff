@@ -1,13 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI highscoreText;
-    public Transform startPos;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI highscoreText;
+    [SerializeField] Transform startPos;
+    
+    int score = 0;
+    private int highscore = 0;
+
+    public void AddPoints(int points)
+    {
+        score += points;
+        scoreText.text = "Score: " + score.ToString();
+
+        if (highscore < score)
+        {
+            highscore = score;
+            highscoreText.text = "Highscore: " + highscore.ToString();
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -15,9 +28,14 @@ public class GameManager : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             other.gameObject.transform.position = startPos.position;
-            highscoreText.text = scoreText.text;
-            scoreText.text = "Highscore: 0";
+            RestetScores();
             other.gameObject.SetActive(true);
         }
+    }
+    private void RestetScores()
+    {
+        highscoreText.text = "Highscore: " + highscore.ToString();
+        scoreText.text = "Score: 0";
+        score = 0;
     }
 }

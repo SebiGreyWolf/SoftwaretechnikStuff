@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Plunger : MonoBehaviour
 {
-    public float releaseForce = 100f;
-    public float defaultForce = 5f;
-    private SpringJoint springJoint;            
-   
+    [SerializeField] float releaseForce = 7f;
+    [SerializeField] float releaseForceFactor = 10f;
+    [SerializeField] float defaultForce = 5f;
+    private SpringJoint springJoint;
+
 
     private void Start()
     {
@@ -16,6 +15,7 @@ public class Plunger : MonoBehaviour
 
     private void Update()
     {
+        //ToDo: neues inputsystem verwenden
         if (Input.GetKeyDown(KeyCode.P))
         {
             springJoint.spring = defaultForce;
@@ -23,7 +23,7 @@ public class Plunger : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.P))
         {
-            springJoint.spring = releaseForce; 
+            springJoint.spring = releaseForce * releaseForceFactor;
         }
     }
 }
